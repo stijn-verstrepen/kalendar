@@ -2,9 +2,10 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import { formatInTimeZone } from "date-fns-tz";
-import { Check, Video } from "lucide-react";
+import { Check, Video, Mail } from "lucide-react";
 import { bookings, eventTypes } from "@/lib/collections";
 import { isValidTokenShape } from "@/lib/tokens";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export default async function BookedPage({
   params,
@@ -28,35 +29,67 @@ export default async function BookedPage({
   const labelTime = formatInTimeZone(dt, booking.guestTimezone, "h:mm a");
 
   return (
-    <main className="max-w-md mx-auto px-6 py-20 text-center animate-fade-up">
-      <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[--primary] text-[--primary-foreground]">
-        <Check size={22} strokeWidth={2.5} />
+    <main className="relative mx-auto flex min-h-screen max-w-md flex-col px-6 pt-6 md:pt-10 animate-fade-in">
+      <div className="mb-12 flex items-center justify-end">
+        <ThemeToggle />
       </div>
-      <h1 className="text-3xl mt-6">You&apos;re booked.</h1>
-      <p className="font-mono text-[13px] text-[--ink-soft] mt-3">
-        {labelDate} · {labelTime}
-      </p>
-      <p className="text-[13px] text-[--ink-muted] mt-2">
-        An invite was sent to {booking.guestEmail}.
-      </p>
-      {booking.meetLink && (
-        <a
-          href={booking.meetLink}
-          className="mt-6 inline-flex items-center gap-1.5 rounded-md border border-[--border] bg-[--surface] px-3 h-9 text-[13px] text-[--ink] hover:border-[--border-strong] transition-colors duration-150"
-        >
-          <Video size={14} className="text-[--primary]" /> Join Google Meet
-        </a>
-      )}
-      <div className="mt-10 pt-6 border-t border-[--border]">
-        <p className="text-[12px] text-[--ink-muted]">
-          Need to make a change?{" "}
-          <a
-            href={`/b/${booking.manageToken}`}
-            className="text-[--primary] hover:underline underline-offset-4"
-          >
-            Manage booking
-          </a>
+
+      <div className="text-center">
+        <span className="relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-primary/30" />
+          <Check size={26} strokeWidth={2.5} />
+        </span>
+        <p className="mt-7 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+          Confirmed
         </p>
+        <h1 className="mt-2 text-[34px] leading-tight tracking-[-0.025em]">
+          You&apos;re booked.
+        </h1>
+        <p className="mt-3 font-mono text-[13px] tabular text-ink-soft">
+          {labelDate} · {labelTime}
+        </p>
+      </div>
+
+      <div className="mt-10 space-y-3">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-surface px-3.5 py-3">
+          <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-bg-elevated text-ink-muted">
+            <Mail size={13} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+              Invite sent
+            </p>
+            <p className="mt-0.5 truncate text-[13px] text-ink">{booking.guestEmail}</p>
+          </div>
+        </div>
+
+        {booking.meetLink && (
+          <a
+            href={booking.meetLink}
+            className="group flex items-center gap-3 rounded-lg border border-border bg-surface px-3.5 py-3 transition-colors duration-150 hover:border-border-strong"
+          >
+            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary-tint text-primary">
+              <Video size={13} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+                Google Meet
+              </p>
+              <p className="mt-0.5 truncate text-[13px] text-ink group-hover:text-primary">
+                Join meeting
+              </p>
+            </div>
+          </a>
+        )}
+      </div>
+
+      <div className="mt-auto pt-12 pb-8 text-center">
+        <a
+          href={`/b/${booking.manageToken}`}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-muted transition-colors duration-150 hover:text-ink"
+        >
+          Manage booking
+        </a>
       </div>
     </main>
   );

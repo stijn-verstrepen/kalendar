@@ -25,17 +25,17 @@ const items = [
 export function Sidebar({ name }: { name: string }) {
   const pathname = usePathname();
   return (
-    <aside className="hidden md:flex md:w-56 md:flex-col border-r border-[--border] bg-[--bg] sticky top-0 h-screen">
-      <div className="px-4 py-5 border-b border-[--border]">
+    <aside className="sticky top-0 hidden h-screen border-r border-border bg-bg md:flex md:w-60 md:flex-col">
+      <div className="border-b border-border px-5 py-6">
         <Link
           href="/dashboard"
           aria-label="Kalendly home"
-          className="text-[--ink] inline-flex items-center"
+          className="inline-flex items-center text-ink"
         >
-          <Wordmark size={20} />
+          <Wordmark size={24} />
         </Link>
       </div>
-      <nav className="flex-1 px-2 py-3 space-y-0.5">
+      <nav className="flex-1 space-y-0.5 px-3 py-4">
         {items.map((it) => {
           const Icon = it.icon;
           const active = pathname.startsWith(it.href);
@@ -43,20 +43,28 @@ export function Sidebar({ name }: { name: string }) {
             <Link
               key={it.href}
               href={it.href}
-              className={`group flex items-center gap-2.5 h-8 rounded-md px-2.5 text-[13px] transition-colors duration-150 ${
+              className={`group relative flex h-9 items-center gap-3 rounded-md px-3 text-[14px] transition-colors duration-150 ${
                 active
-                  ? "bg-[--surface-hover] text-[--ink] font-medium"
-                  : "text-[--ink-soft] hover:bg-[--surface-hover] hover:text-[--ink]"
+                  ? "bg-surface-hover font-medium text-ink"
+                  : "text-ink-soft hover:bg-surface-hover hover:text-ink"
               }`}
             >
-              <Icon size={15} className={active ? "text-[--primary]" : ""} />
+              {active && (
+                <span className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-r-full bg-primary" />
+              )}
+              <Icon
+                size={16}
+                className={active ? "text-primary" : "text-ink-muted group-hover:text-ink-soft"}
+              />
               {it.label}
             </Link>
           );
         })}
       </nav>
-      <div className="px-3 py-3 border-t border-[--border] flex items-center justify-between gap-2">
-        <div className="min-w-0 flex-1 truncate text-[12px] text-[--ink-muted]">{name}</div>
+      <div className="flex items-center justify-between gap-2 border-t border-border px-3 py-3">
+        <div className="min-w-0 flex-1 truncate font-mono text-[11px] uppercase tracking-[0.08em] text-ink-muted">
+          {name}
+        </div>
         <div className="flex items-center gap-0.5">
           <ThemeToggle />
           <button
@@ -64,7 +72,7 @@ export function Sidebar({ name }: { name: string }) {
             onClick={() => signOut({ callbackUrl: "/login" })}
             aria-label="Sign out"
             title="Sign out"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[--ink-muted] transition-colors duration-150 hover:bg-[--surface-hover] hover:text-[--ink]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors duration-150 hover:bg-surface-hover hover:text-ink"
           >
             <LogOut size={15} />
           </button>

@@ -7,6 +7,28 @@ import { listCalendars } from "@/lib/calendar";
 import { ProfileSection, GoogleSection } from "@/components/admin/SettingsSections";
 import { AppearanceSection } from "@/components/admin/AppearanceSection";
 
+function SettingsCard({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="grid grid-cols-1 gap-6 md:grid-cols-[200px_1fr] md:gap-10">
+      <div>
+        <h2 className="text-[14px] font-medium tracking-[-0.005em] text-ink">{title}</h2>
+        {description && (
+          <p className="mt-1.5 text-[12px] leading-relaxed text-ink-muted">{description}</p>
+        )}
+      </div>
+      <div>{children}</div>
+    </section>
+  );
+}
+
 export default async function SettingsPage() {
   const session = await requireAdmin();
   const user = await (await users()).findOne({ _id: new ObjectId(session.user.id) });
@@ -21,7 +43,8 @@ export default async function SettingsPage() {
     try {
       cals = await listCalendars(session.user.id);
       if (cals.length === 0) {
-        calError = "Connected, but no calendars were returned. Check the dev terminal for the raw response.";
+        calError =
+          "Connected, but no calendars were returned. Check the dev terminal for the raw response.";
       }
     } catch (err) {
       calError = err instanceof Error ? err.message : "Could not load calendars.";
@@ -30,58 +53,62 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="space-y-7">
-      <header className="flex items-end justify-between border-b border-[--border] pb-5">
-        <div>
-          <h1 className="text-2xl">Settings</h1>
-          <p className="text-[--ink-muted] text-sm mt-1">Manage your account and integrations.</p>
-        </div>
+    <div className="space-y-10">
+      <header className="space-y-2 border-b border-border pb-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+          Account
+        </p>
+        <h1 className="text-[28px] leading-tight tracking-[-0.02em]">Settings</h1>
       </header>
 
-      <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
-        <div className="mb-4">
-          <h2 className="text-base">Appearance</h2>
-          <p className="text-[12px] text-[--ink-muted] mt-0.5">
-            Choose how Kalendly looks to you. System matches your OS preference.
-          </p>
-        </div>
+      <SettingsCard
+        title="Appearance"
+        description="Choose how Kalendly looks to you. System matches your OS preference."
+      >
         <AppearanceSection />
-      </section>
+      </SettingsCard>
 
-      <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
-        <div className="mb-4">
-          <h2 className="text-base">Profile</h2>
-          <p className="text-[12px] text-[--ink-muted] mt-0.5">
-            Public name and timezone shown on your booking pages.
-          </p>
-        </div>
+      <div className="border-t border-border" />
+
+      <SettingsCard
+        title="Profile"
+        description="Public name and timezone shown on your booking pages."
+      >
         <ProfileSection name={user.name} bio={user.bio} tz={user.defaultTimezone} />
-      </section>
+      </SettingsCard>
 
-      <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
-        <div className="mb-4">
-          <h2 className="text-base">Google Calendar</h2>
-          <p className="text-[12px] text-[--ink-muted] mt-0.5">
-            Source of truth for availability and where bookings are written.
-          </p>
-        </div>
+      <div className="border-t border-border" />
+
+      <SettingsCard
+        title="Google Calendar"
+        description="Source of truth for availability and where bookings are written."
+      >
         <GoogleSection
           status={integ?.status ?? null}
           calendars={cals}
           selectedId={integ?.calendarId ?? null}
           error={calError}
         />
-      </section>
+      </SettingsCard>
 
-      <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
-        <div className="mb-2">
-          <h2 className="text-base">Password</h2>
-        </div>
-        <p className="text-[13px] text-[--ink-soft] leading-relaxed">
-          Edit <code className="font-mono text-[--ink] bg-[--surface-hover] px-1 py-0.5 rounded">ADMIN_PASSWORD</code> in{" "}
-          <code className="font-mono text-[--ink] bg-[--surface-hover] px-1 py-0.5 rounded">.env.local</code> and restart the dev server.
+      <div className="border-t border-border" />
+
+      <SettingsCard
+        title="Password"
+        description="Server-side credential pinned to env."
+      >
+        <p className="text-[13px] leading-relaxed text-ink-soft">
+          Edit{" "}
+          <code className="rounded bg-surface-hover px-1 py-0.5 font-mono text-[12px] text-ink">
+            ADMIN_PASSWORD
+          </code>{" "}
+          in{" "}
+          <code className="rounded bg-surface-hover px-1 py-0.5 font-mono text-[12px] text-ink">
+            .env.local
+          </code>{" "}
+          and restart the dev server.
         </p>
-      </section>
+      </SettingsCard>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export function AppearanceSection() {
   const current = mounted ? (theme ?? "system") : null;
 
   return (
-    <div className="inline-flex items-center gap-1 rounded-md border border-[--border] bg-[--bg-elevated] p-1">
+    <div className="inline-flex items-center gap-1 rounded-md border border-border bg-bg-elevated p-1">
       {options.map(({ value, label, Icon }) => {
         const active = current === value;
         return (
@@ -27,13 +27,13 @@ export function AppearanceSection() {
             type="button"
             onClick={() => setTheme(value)}
             aria-pressed={active}
-            className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-[5px] text-[13px] transition-colors duration-150 ${
+            className={`inline-flex h-8 items-center gap-1.5 rounded-[5px] px-3 text-[12.5px] transition-colors duration-150 ${
               active
-                ? "bg-[--surface] text-[--ink] shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
-                : "text-[--ink-muted] hover:text-[--ink]"
+                ? "bg-surface text-ink shadow-[0_1px_2px_rgba(0,0,0,0.05)]"
+                : "text-ink-muted hover:text-ink"
             }`}
           >
-            <Icon size={14} className={active ? "text-[--primary]" : ""} />
+            <Icon size={14} className={active ? "text-primary" : ""} />
             {label}
           </button>
         );

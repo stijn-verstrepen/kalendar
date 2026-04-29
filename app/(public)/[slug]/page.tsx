@@ -5,7 +5,8 @@ import { eventTypes, integrations, availability, bookings } from "@/lib/collecti
 import { computeSlots } from "@/lib/availability";
 import { getBusyTimes } from "@/lib/calendar";
 import { ymdInTz } from "@/lib/timezone";
-import { BookingCalendar } from "@/components/public/BookingCalendar";
+import { BookingShell } from "@/components/public/BookingShell";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export const revalidate = 30;
 
@@ -76,41 +77,31 @@ export default async function BookingPage({
         : "In-person";
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-12 md:py-16 animate-fade-up">
+    <main className="relative mx-auto max-w-5xl px-6 pb-16 pt-6 md:pt-10 animate-fade-in">
+      <div className="mb-10 flex items-center justify-end">
+        <ThemeToggle />
+      </div>
+
       {sp.reschedule && (
-        <div className="mb-6 rounded-md bg-[--primary-tint] px-4 py-2.5 text-[13px] text-[--ink] flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[--primary]" />
+        <div className="mb-8 flex items-center gap-2.5 rounded-lg border border-border bg-primary-tint px-3.5 py-2.5 text-[13px] text-ink">
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+          </span>
           Pick a new time below to reschedule your booking.
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-14">
-        <aside className="md:col-span-2 space-y-3">
-          <div
-            className="h-[2px] w-10 rounded-full"
-            style={{ background: `var(--event-${evt.color})` }}
-          />
-          <h1 className="text-3xl">{evt.title}</h1>
-          <p className="font-mono text-[12px] text-[--ink-muted]">
-            {evt.durationMinutes}m · {locationLabel}
-          </p>
-          {evt.description && (
-            <p className="text-[14px] text-[--ink-soft] mt-3 whitespace-pre-wrap leading-relaxed">
-              {evt.description}
-            </p>
-          )}
-        </aside>
-        <section className="md:col-span-3">
-          {unavailable ? (
-            <div className="rounded-lg border border-[--border] bg-[--surface] p-8 text-center">
-              <p className="text-sm text-[--ink-muted]">
-                Booking is temporarily unavailable. Please try again later.
-              </p>
-            </div>
-          ) : (
-            <BookingCalendar slug={slug} slots={slots} ownerTimezone={avail!.timezone} />
-          )}
-        </section>
-      </div>
+
+      <BookingShell
+        slug={slug}
+        title={evt.title}
+        description={evt.description}
+        durationMinutes={evt.durationMinutes}
+        color={evt.color}
+        locationLabel={locationLabel}
+        slots={slots}
+        unavailable={unavailable}
+      />
     </main>
   );
 }

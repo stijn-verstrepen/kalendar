@@ -239,16 +239,6 @@ h3 { letter-spacing: -0.015em; }
 }
 .animate-fade-in { animation: fadeIn 180ms ease-out both; }
 
-/* ---------------------------------------------------------------------------
- * Atmosphere helpers
- * ------------------------------------------------------------------------- */
-
-.ambient-primary {
-  background:
-    radial-gradient(ellipse 60% 40% at top left, var(--primary-tint), transparent 70%),
-    var(--bg);
-}
-
 @layer base {
   * {
     border-color: var(--border);

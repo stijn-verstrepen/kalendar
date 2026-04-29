@@ -22,14 +22,16 @@ export default async function AvailabilityPage() {
       };
 
   return (
-    <div className="space-y-7">
-      <header className="flex items-end justify-between border-b border-[--border] pb-5">
-        <div>
-          <h1 className="text-2xl">Availability</h1>
-          <p className="text-[--ink-muted] text-sm mt-1">
-            When you&apos;re available to take meetings.
-          </p>
-        </div>
+    <div className="space-y-8">
+      <header className="space-y-2 border-b border-border pb-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+          Working hours
+        </p>
+        <h1 className="text-[28px] leading-tight tracking-[-0.02em]">Availability</h1>
+        <p className="max-w-2xl text-[13px] text-ink-soft">
+          Set the windows when you can take meetings. Date overrides let you block off
+          specific days or open up extra hours.
+        </p>
       </header>
       <AvailabilityEditor initial={initial} />
     </div>

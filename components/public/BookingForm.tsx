@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,7 +43,11 @@ export function BookingForm({ slug, startUtc, guestTimezone, customQuestions }: 
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data.error === "slot_taken" ? "That slot was just taken. Please pick another." : "Could not complete booking.");
+        setError(
+          data.error === "slot_taken"
+            ? "That slot was just taken. Please pick another."
+            : "Could not complete booking.",
+        );
         return;
       }
       const { token } = await res.json();
@@ -51,7 +56,7 @@ export function BookingForm({ slug, startUtc, guestTimezone, customQuestions }: 
   }
 
   return (
-    <form action={submit} className="space-y-5 max-w-md">
+    <form action={submit} className="max-w-md space-y-5">
       <div className="space-y-2">
         <Label htmlFor="guestName">Name</Label>
         <Input id="guestName" name="guestName" required />
@@ -62,32 +67,59 @@ export function BookingForm({ slug, startUtc, guestTimezone, customQuestions }: 
       </div>
       {customQuestions.map((q) => (
         <div key={q.id} className="space-y-2">
-          <Label htmlFor={q.id}>{q.label}{q.required && " *"}</Label>
+          <Label htmlFor={q.id}>
+            {q.label}
+            {q.required && <span className="ml-0.5 text-danger">*</span>}
+          </Label>
           {q.type === "long_text" ? (
-            <Textarea id={q.id} required={q.required} value={answers[q.id] ?? ""} onChange={(e) => setAnswer(q.id, e.target.value)} />
+            <Textarea
+              id={q.id}
+              required={q.required}
+              value={answers[q.id] ?? ""}
+              onChange={(e) => setAnswer(q.id, e.target.value)}
+            />
           ) : q.type === "select" ? (
             <select
               id={q.id}
               required={q.required}
               value={answers[q.id] ?? ""}
               onChange={(e) => setAnswer(q.id, e.target.value)}
-              className="h-9 w-full rounded-md border border-[--border] bg-[--surface] px-3 text-sm"
+              className="h-9 w-full rounded-md border border-border bg-surface px-3 text-sm text-ink outline-none transition-colors duration-150 hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-ring"
             >
-              <option value="">Choose...</option>
-              {q.options.map((o) => <option key={o} value={o}>{o}</option>)}
+              <option value="">Choose…</option>
+              {q.options.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
             </select>
           ) : (
-            <Input id={q.id} required={q.required} value={answers[q.id] ?? ""} onChange={(e) => setAnswer(q.id, e.target.value)} />
+            <Input
+              id={q.id}
+              required={q.required}
+              value={answers[q.id] ?? ""}
+              onChange={(e) => setAnswer(q.id, e.target.value)}
+            />
           )}
         </div>
       ))}
       {error && (
-        <p className="rounded-md border border-[--danger]/40 bg-[--danger]/10 px-3 py-2 text-[13px] text-[--danger]">
+        <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-[12.5px] text-danger">
           {error}
         </p>
       )}
-      <Button type="submit" size="lg" disabled={pending} className="w-full">
-        {pending ? "Scheduling..." : "Schedule event"}
+      <Button type="submit" size="lg" disabled={pending} className="w-full gap-2">
+        {pending ? (
+          <>
+            <Loader2 className="animate-spin" />
+            <span>Scheduling…</span>
+          </>
+        ) : (
+          <>
+            <span>Schedule event</span>
+            <ArrowRight />
+          </>
+        )}
       </Button>
     </form>
   );

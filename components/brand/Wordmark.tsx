@@ -21,7 +21,7 @@ export function Wordmark({ size = 22, className, tone = "default" }: Props) {
           letterSpacing: "-0.04em",
           fontSize: Math.round(size * 0.86),
           lineHeight: 1,
-          marginLeft: -2,
+          marginLeft: -Math.round(size * 0.16),
         }}
       >
         alendly

@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -38,11 +39,31 @@ export function LoginForm() {
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input id="password" name="password" type="password" autoComplete="current-password" required />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+        />
       </div>
-      {error && <p className="text-sm text-[--danger]">{error}</p>}
-      <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Signing in..." : "Sign in"}
+      {error && (
+        <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-[12.5px] text-danger">
+          {error}
+        </p>
+      )}
+      <Button type="submit" className="w-full gap-2" disabled={pending}>
+        {pending ? (
+          <>
+            <Loader2 className="animate-spin" />
+            <span>Signing in…</span>
+          </>
+        ) : (
+          <>
+            <span>Sign in</span>
+            <ArrowRight />
+          </>
+        )}
       </Button>
     </form>
   );

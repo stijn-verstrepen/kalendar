@@ -25,16 +25,18 @@ export default async function EditEventType({ params }: { params: Promise<{ id: 
   };
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-8">
       <Link
         href="/event-types"
-        className="inline-flex items-center gap-1 text-[12px] text-[--ink-muted] hover:text-[--ink] transition-colors duration-150"
+        className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 -ml-1.5 text-[12px] text-ink-muted transition-colors duration-150 hover:bg-surface-hover hover:text-ink"
       >
         <ArrowLeft size={13} /> All event types
       </Link>
-      <header className="border-b border-[--border] pb-5">
-        <h1 className="text-2xl">Edit event type</h1>
-        <p className="text-[--ink-muted] text-sm mt-1 font-mono">/{evt.slug}</p>
+      <header className="space-y-2 border-b border-border pb-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+          /{evt.slug}
+        </p>
+        <h1 className="text-[28px] leading-tight tracking-[-0.02em]">{evt.title}</h1>
       </header>
       <EventTypeForm existingId={id} initial={initial} />
     </div>

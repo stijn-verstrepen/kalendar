@@ -30,7 +30,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       title={mounted ? `Theme: ${theme}` : "Theme"}
       aria-label="Toggle theme"
       className={
-        "inline-flex h-8 w-8 items-center justify-center rounded-md text-[--ink-muted] transition-colors duration-150 hover:bg-[--surface-hover] hover:text-[--ink] " +
+        "inline-flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors duration-150 hover:bg-surface-hover hover:text-ink " +
         (className ?? "")
       }
     >
