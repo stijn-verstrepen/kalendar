@@ -5,6 +5,7 @@ import { users, integrations } from "@/lib/collections";
 import { requireAdmin } from "@/lib/auth-helpers";
 import { listCalendars } from "@/lib/calendar";
 import { ProfileSection, GoogleSection } from "@/components/admin/SettingsSections";
+import { AppearanceSection } from "@/components/admin/AppearanceSection";
 
 export default async function SettingsPage() {
   const session = await requireAdmin();
@@ -36,6 +37,16 @@ export default async function SettingsPage() {
           <p className="text-[--ink-muted] text-sm mt-1">Manage your account and integrations.</p>
         </div>
       </header>
+
+      <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
+        <div className="mb-4">
+          <h2 className="text-base">Appearance</h2>
+          <p className="text-[12px] text-[--ink-muted] mt-0.5">
+            Choose how Kalendly looks to you. System matches your OS preference.
+          </p>
+        </div>
+        <AppearanceSection />
+      </section>
 
       <section className="rounded-lg border border-[--border] bg-[--surface] p-5">
         <div className="mb-4">
