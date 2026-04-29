@@ -40,8 +40,7 @@ export default async function SettingsPage() {
       <section className="space-y-2">
         <h2 className="font-display text-xl">Password</h2>
         <p className="text-sm text-[--color-ink-muted]">
-          Run <code className="font-mono">npm run set-password</code> in your terminal, then paste the printed
-          <code className="font-mono"> ADMIN_PASSWORD_HASH</code> into <code className="font-mono">.env.local</code> and restart.
+          Edit <code className="font-mono">ADMIN_PASSWORD</code> in <code className="font-mono">.env.local</code> and restart the dev server.
         </p>
       </section>
     </div>

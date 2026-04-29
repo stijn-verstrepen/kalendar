@@ -5,7 +5,7 @@ const schema = z.object({
   NEXTAUTH_SECRET: z.string().min(1),
   NEXTAUTH_URL: z.url(),
   ADMIN_EMAIL: z.email(),
-  ADMIN_PASSWORD_HASH: z.string().min(1),
+  ADMIN_PASSWORD: z.string().min(1),
   APP_URL: z.url(),
   COMPOSIO_API_KEY: z.string().min(1),
 });

@@ -14,7 +14,6 @@ export type LocationSpec =
 export interface UserDoc {
   _id: ObjectId;
   email: string;
-  passwordHash: string;
   name: string;
   bio: string | null;
   defaultTimezone: string;

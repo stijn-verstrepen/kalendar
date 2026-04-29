@@ -15,7 +15,6 @@ export async function bootstrap() {
     await userCol.insertOne({
       _id: userId,
       email: env().ADMIN_EMAIL,
-      passwordHash: env().ADMIN_PASSWORD_HASH,
       name: "Admin",
       bio: null,
       defaultTimezone: "UTC",
@@ -40,11 +39,6 @@ export async function bootstrap() {
       dateOverrides: [],
       updatedAt: new Date(),
     });
-  } else if (existing.passwordHash !== env().ADMIN_PASSWORD_HASH) {
-    await userCol.updateOne(
-      { _id: existing._id },
-      { $set: { passwordHash: env().ADMIN_PASSWORD_HASH, updatedAt: new Date() } }
-    );
   }
 
   bootstrapped = true;

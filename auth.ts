@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { env } from "@/lib/env";
 import { bootstrap } from "@/lib/bootstrap";
@@ -24,13 +23,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = credentialsSchema.safeParse(raw);
         if (!parsed.success) return null;
         if (parsed.data.email !== env().ADMIN_EMAIL) return null;
+        if (parsed.data.password !== env().ADMIN_PASSWORD) return null;
 
         await bootstrap();
         const user = await (await users()).findOne({ email: parsed.data.email });
         if (!user) return null;
-
-        const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
-        if (!ok) return null;
 
         return { id: user._id.toString(), email: user.email, name: user.name };
       },
