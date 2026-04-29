@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #FAFAF7;
+  --color-surface: #FFFFFF;
+  --color-ink: #1A1625;
+  --color-ink-soft: #4A4458;
+  --color-ink-muted: #8A8499;
+  --color-border: #EAE7E0;
+  --color-border-strong: #D8D4CB;
+
+  --color-primary: #5B2AB8;
+  --color-primary-hover: #4A1FA3;
+  --color-primary-tint: #F1EBFF;
+  --color-primary-ink: #FFFFFF;
+
+  --color-success: #2F7A52;
+  --color-danger: #B23B3B;
+  --color-warning: #B27A3B;
+
+  --color-event-iris:  #5B2AB8;
+  --color-event-rose:  #B23B5E;
+  --color-event-amber: #B27A3B;
+  --color-event-sage:  #5E8B6A;
+  --color-event-slate: #4A5562;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans:    var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+
+  --radius-card:  12px;
+  --radius-input: 8px;
+  --radius-pill:  9999px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  background: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-sans    { font-family: var(--font-sans); }
+.font-mono    { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-fade-up { animation: fadeUp 320ms ease-out both; }
