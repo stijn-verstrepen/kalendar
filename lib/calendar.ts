@@ -56,11 +56,49 @@ export async function listCalendars(userId: string): Promise<CalendarSummary[]> 
     dangerouslySkipVersionCheck: true,
   });
   if (!res.successful) throw new CalendarConnectionError(res.error ?? "list_calendars failed");
-  const items = (res.data as { items?: unknown[] }).items ?? [];
-  return (items as Array<{ id: string; summary: string; primary?: boolean }>).map((c) => ({
-    id: c.id,
-    summary: c.summary,
-    primary: !!c.primary,
+
+  const raw = res.data as Record<string, unknown> | null | undefined;
+  if (process.env.NODE_ENV !== "production") {
+    console.log("[calendar] LIST_CALENDARS response keys:", raw ? Object.keys(raw) : "(none)");
+  }
+
+  // Composio wraps Google API responses inconsistently: items may be at the top level
+  // (data.items), nested under data/response_data/calendar_list/calendars, or the
+  // result itself may be the array.
+  const candidates: unknown[] = [
+    raw,
+    raw?.data,
+    raw?.response_data,
+    raw?.calendar_list,
+    raw?.calendars,
+    raw?.calendarList,
+    raw?.items,
+  ];
+
+  let items: Array<Record<string, unknown>> = [];
+  for (const c of candidates) {
+    if (Array.isArray(c)) {
+      items = c as Array<Record<string, unknown>>;
+      break;
+    }
+    if (c && typeof c === "object" && Array.isArray((c as { items?: unknown }).items)) {
+      items = (c as { items: Array<Record<string, unknown>> }).items;
+      break;
+    }
+  }
+
+  if (items.length === 0) {
+    console.error(
+      "[calendar] LIST_CALENDARS returned no calendars; raw response:",
+      JSON.stringify(raw, null, 2),
+    );
+    return [];
+  }
+
+  return items.map((c) => ({
+    id: String(c.id ?? c.calendar_id ?? c.calendarId ?? ""),
+    summary: String(c.summary ?? c.name ?? c.summary_override ?? c.id ?? ""),
+    primary: Boolean(c.primary ?? false),
   }));
 }
 

@@ -15,11 +15,16 @@ export default async function SettingsPage() {
     provider: "google_calendar",
   });
   let cals: Array<{ id: string; summary: string; primary: boolean }> = [];
+  let calError: string | null = null;
   if (integ?.status === "ACTIVE") {
     try {
       cals = await listCalendars(session.user.id);
-    } catch {
-      cals = [];
+      if (cals.length === 0) {
+        calError = "Connected, but no calendars were returned. Check the dev terminal for the raw response.";
+      }
+    } catch (err) {
+      calError = err instanceof Error ? err.message : "Could not load calendars.";
+      console.error("[settings] listCalendars failed:", err);
     }
   }
 
@@ -53,6 +58,7 @@ export default async function SettingsPage() {
           status={integ?.status ?? null}
           calendars={cals}
           selectedId={integ?.calendarId ?? null}
+          error={calError}
         />
       </section>
 
