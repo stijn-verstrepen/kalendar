@@ -8,7 +8,6 @@ const schema = z.object({
   ADMIN_PASSWORD_HASH: z.string().min(1),
   APP_URL: z.url(),
   COMPOSIO_API_KEY: z.string().min(1),
-  COMPOSIO_GOOGLE_AUTH_CONFIG_ID: z.string().min(1),
 });
 
 let parsed: z.infer<typeof schema> | null = null;

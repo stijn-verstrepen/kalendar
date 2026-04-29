@@ -1,5 +1,4 @@
 import { composio, CalendarConnectionError } from "./composio";
-import { env } from "./env";
 
 export interface BusyInterval {
   start: Date;
@@ -12,12 +11,35 @@ export interface CalendarSummary {
   primary: boolean;
 }
 
+const GOOGLE_TOOLKIT = "googlecalendar";
+const AUTH_CONFIG_NAME = "Kalendly Google Calendar";
+
+let cachedAuthConfigId: string | null = null;
+
+export async function ensureGoogleAuthConfig(): Promise<string> {
+  if (cachedAuthConfigId) return cachedAuthConfigId;
+
+  const existing = await composio().authConfigs.list({
+    toolkit: GOOGLE_TOOLKIT,
+    isComposioManaged: true,
+  });
+  const found = existing.items?.[0];
+  if (found?.id) {
+    cachedAuthConfigId = found.id;
+    return cachedAuthConfigId;
+  }
+
+  const created = await composio().authConfigs.create(GOOGLE_TOOLKIT, {
+    type: "use_composio_managed_auth",
+    name: AUTH_CONFIG_NAME,
+  });
+  cachedAuthConfigId = created.id;
+  return cachedAuthConfigId;
+}
+
 export async function initiateGoogleConnection(userId: string, callbackUrl: string) {
-  const req = await composio().connectedAccounts.initiate(
-    userId,
-    env().COMPOSIO_GOOGLE_AUTH_CONFIG_ID,
-    { callbackUrl },
-  );
+  const authConfigId = await ensureGoogleAuthConfig();
+  const req = await composio().connectedAccounts.initiate(userId, authConfigId, { callbackUrl });
   // req.redirectUrl is string | null per SDK types; cast to string for redirect flow
   return { redirectUrl: req.redirectUrl as string, connectionId: req.id };
 }

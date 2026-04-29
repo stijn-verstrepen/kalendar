@@ -251,8 +251,8 @@ A TTL index on `{ endUtc: 1 }` set to 90 days expires old bookings (and therefor
 
 ## 7. Composio Google Calendar integration
 
-### One-time auth-config setup
-A single Composio auth config is created once for the app, using Composio managed auth (their OAuth credentials). The `authConfigId` is pasted into `.env.local` as `COMPOSIO_GOOGLE_AUTH_CONFIG_ID`. This is a CLI/dashboard step, not done from the running app.
+### Auth-config provisioning (zero-setup)
+The Composio auth config is provisioned by the app itself on first connect — no dashboard step, no env var to paste in. `lib/calendar.ensureGoogleAuthConfig()` calls `composio.authConfigs.list({ toolkit: "googlecalendar", isComposioManaged: true })`; if any managed config exists for the toolkit it reuses the first one's `id`, otherwise it calls `composio.authConfigs.create("googlecalendar", { type: "use_composio_managed_auth", name: "Kalendly Google Calendar" })`. The resolved id is cached in module memory for the lifetime of the process.
 
 > **Note on consent screen branding:** Because we use Composio managed auth, the OAuth consent screen displays "Composio" as the requesting application. For a single-user personal tool this is acceptable. Future follow-up: register a dedicated Google Cloud OAuth app and switch to `use_custom_auth` to display "Kalendly" instead.
 
@@ -260,9 +260,10 @@ A single Composio auth config is created once for the app, using Composio manage
 1. Admin signs in, navigates to `/settings`.
 2. Clicks "Connect Google Calendar". Server action calls:
    ```ts
+   const authConfigId = await ensureGoogleAuthConfig();
    composio.connectedAccounts.initiate(
      userId,                                  // users._id stringified
-     COMPOSIO_GOOGLE_AUTH_CONFIG_ID,
+     authConfigId,
      { callbackUrl: `${APP_URL}/api/integrations/google/callback` }
    )
    ```
@@ -569,9 +570,8 @@ ADMIN_PASSWORD_HASH=                   # set via npm run set-password
 # App
 APP_URL=http://localhost:3000          # used in calendar-event manage links
 
-# Composio
+# Composio (auth config is auto-provisioned via the API on first connect)
 COMPOSIO_API_KEY=
-COMPOSIO_GOOGLE_AUTH_CONFIG_ID=        # created once in Composio dashboard
 ```
 
 Production `.env`s on Vercel mirror the same keys with production values (HTTPS URLs, production Mongo URI).
@@ -580,15 +580,14 @@ Production `.env`s on Vercel mirror the same keys with production values (HTTPS 
 
 1. Provision MongoDB Atlas free cluster → IP allow-list → connection string → paste as `MONGODB_URI`
 2. Run `openssl rand -base64 32` → paste as `NEXTAUTH_SECRET`
-3. Sign up at composio.dev → API Settings → copy API key → paste as `COMPOSIO_API_KEY`
-4. In Composio dashboard, create a Google Calendar auth config (managed auth) → copy auth config ID → paste as `COMPOSIO_GOOGLE_AUTH_CONFIG_ID`
-5. Run `npm run set-password`, type a strong password → copy printed bcrypt hash → paste as `ADMIN_PASSWORD_HASH`
-6. `npm run dev` → open `localhost:3000/login` → sign in with email + password
-7. Navigate to `/settings` → "Connect Google Calendar" → complete OAuth
-8. In `/settings`, confirm the active calendar selection
-9. Set weekly availability in `/availability`
-10. Create one or more event types in `/event-types`
-11. Copy a public link → test-book yourself in an incognito window → confirm:
+3. Sign up at composio.dev → API Settings → copy API key → paste as `COMPOSIO_API_KEY`. The auth config is created automatically on first connect.
+4. Run `npm run set-password`, type a strong password → copy printed bcrypt hash → paste as `ADMIN_PASSWORD_HASH`
+5. `npm run dev` → open `localhost:3000/login` → sign in with email + password
+6. Navigate to `/settings` → "Connect Google Calendar" → complete OAuth
+7. In `/settings`, confirm the active calendar selection
+8. Set weekly availability in `/availability`
+9. Create one or more event types in `/event-types`
+10. Copy a public link → test-book yourself in an incognito window → confirm:
     - Booking page shows correct slots
     - Submit creates a Google Calendar event
     - Guest email receives the Google Calendar invite
