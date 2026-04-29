@@ -10,12 +10,23 @@ const schema = z.object({
   COMPOSIO_API_KEY: z.string().min(1),
 });
 
-let parsed: z.infer<typeof schema> | null = null;
+type Env = z.infer<typeof schema>;
 
-export function env() {
+let parsed: Env | null = null;
+
+export function env(): Env {
   if (parsed) return parsed;
   const result = schema.safeParse(process.env);
   if (!result.success) {
+    // During `next build`, modules are evaluated to collect page data.
+    // If env vars aren't set yet (e.g. first Vercel deploy), don't fail
+    // the build — return placeholders so module evaluation completes.
+    // Runtime requests re-evaluate and validate strictly.
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      return new Proxy({} as Env, {
+        get: (_, key: string) => process.env[key] ?? "build-placeholder",
+      });
+    }
     const missing = result.error.issues.map((i) => i.path.join(".")).join(", ");
     throw new Error(`Missing/invalid env vars: ${missing}`);
   }
