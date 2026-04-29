@@ -16,7 +16,7 @@ export default async function EventTypesPage() {
           <h1 className="text-3xl font-display">Event types</h1>
           <p className="text-[--color-ink-muted] text-sm mt-1">The meetings people can book with you.</p>
         </div>
-        <Button render={<Link href="/event-types/new" />}>
+        <Button nativeButton={false} render={<Link href="/event-types/new" />}>
           <Plus size={16} className="mr-2" /> New event type
         </Button>
       </header>

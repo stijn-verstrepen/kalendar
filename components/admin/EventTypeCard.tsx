@@ -52,7 +52,7 @@ export function EventTypeCard({ id, slug, title, duration, color, active, descri
           <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText(link)} title="Copy link">
             <Copy size={16} />
           </Button>
-          <Button variant="ghost" size="icon" title="Edit" render={<Link href={`/event-types/${id}/edit`} />}>
+          <Button nativeButton={false} variant="ghost" size="icon" title="Edit" render={<Link href={`/event-types/${id}/edit`} />}>
             <Pencil size={16} />
           </Button>
           <Button

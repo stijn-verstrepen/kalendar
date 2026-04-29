@@ -32,7 +32,7 @@ export default async function DashboardPage() {
       {(!integ || integ.status !== "ACTIVE") && (
         <div className="rounded-xl border border-[--color-warning] bg-[--color-primary-tint] p-4 flex items-center justify-between">
           <p className="text-sm">Connect your Google Calendar to start accepting bookings.</p>
-          <Button render={<Link href="/settings" />}>Connect</Button>
+          <Button nativeButton={false} render={<Link href="/settings" />}>Connect</Button>
         </div>
       )}
 
