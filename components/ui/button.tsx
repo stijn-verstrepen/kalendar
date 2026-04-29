@@ -4,16 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-[--ring] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-[--danger] aria-invalid:ring-2 aria-invalid:ring-[--danger]/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-[--color-primary] text-[--color-primary-ink] hover:bg-[--color-primary-hover] shadow-sm",
-        destructive: "bg-[--color-danger] text-white hover:opacity-90",
-        outline: "border border-[--color-border-strong] bg-[--color-surface] hover:bg-[--color-primary-tint] text-[--color-ink]",
-        secondary: "bg-[--color-primary-tint] text-[--color-ink] hover:bg-[--color-primary-tint]/80",
-        ghost: "hover:bg-[--color-primary-tint] text-[--color-ink]",
-        link: "text-[--color-primary] underline-offset-4 hover:underline",
+        default: "bg-[--primary] text-[--primary-foreground] hover:bg-[--primary-hover]",
+        destructive: "bg-[--danger] text-white hover:opacity-90",
+        outline: "border border-[--border-strong] bg-transparent text-[--ink] hover:bg-[--surface-hover]",
+        secondary: "bg-[--surface] text-[--ink] border border-[--border-strong] hover:bg-[--surface-hover]",
+        ghost: "text-[--ink-soft] hover:bg-[--surface-hover] hover:text-[--ink]",
+        link: "text-[--primary] underline-offset-4 hover:underline",
       },
       size: {
         default:
