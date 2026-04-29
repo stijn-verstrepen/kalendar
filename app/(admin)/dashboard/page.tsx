@@ -24,15 +24,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="relative space-y-9">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-10 -top-10 h-64 -z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 18% 0%, var(--primary-tint), transparent 65%)",
-        }}
-      />
+    <div className="space-y-9">
       <header className="flex items-end justify-between border-b border-[--border] pb-5">
         <div>
           <h1 className="text-2xl">Dashboard</h1>
