@@ -128,7 +128,16 @@ export function EventTypeForm({
               <Input
                 id="slug"
                 value={state.slug}
-                onChange={(e) => patch("slug", e.target.value.toLowerCase())}
+                onChange={(e) =>
+                  patch(
+                    "slug",
+                    e.target.value
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^a-z0-9-]/g, "")
+                      .replace(/-+/g, "-"),
+                  )
+                }
                 placeholder="discovery"
                 className="font-mono"
               />
