@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700&display=swap');
 
 @custom-variant dark (&:is(.dark *));
 
@@ -22,16 +23,16 @@
   --ink-muted:           #8A8696;
   --ink-faint:           #BAB6C2;
 
-  --primary:             #7C5CF6;
-  --primary-hover:       #6D49F2;
-  --primary-active:      #6646E7;
-  --primary-tint:        #F1ECFE;
+  --primary:             #0088ca;
+  --primary-hover:       #0079b5;
+  --primary-active:      #006da0;
+  --primary-tint:        #E6F4FB;
   --primary-foreground:  #FFFFFF;
 
   --success:             #16A34A;
   --danger:              #DC2626;
   --warning:             #D97706;
-  --ring:                rgba(124, 92, 246, 0.32);
+  --ring:                rgba(0, 136, 202, 0.32);
 
   --event-iris:  #7C5CF6;
   --event-rose:  #DB2777;
@@ -78,7 +79,7 @@
   --chart-4: var(--event-sage);
   --chart-5: var(--event-slate);
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
 }
 
@@ -94,16 +95,16 @@ html.dark {
   --ink-muted:           #74708A;
   --ink-faint:           #4A4759;
 
-  --primary:             #A88AFA;
-  --primary-hover:       #B9A0FC;
-  --primary-active:      #9676F5;
-  --primary-tint:        rgba(168, 138, 250, 0.14);
+  --primary:             #29A8E0;
+  --primary-hover:       #3DB5E8;
+  --primary-active:      #1E9ED5;
+  --primary-tint:        rgba(0, 136, 202, 0.14);
   --primary-foreground:  #0B0B0F;
 
   --success:             #4ADE80;
   --danger:              #F87171;
   --warning:             #FBBF24;
-  --ring:                rgba(168, 138, 250, 0.4);
+  --ring:                rgba(41, 168, 224, 0.4);
 
   --event-iris:  #A88AFA;
   --event-rose:  #F472B6;
