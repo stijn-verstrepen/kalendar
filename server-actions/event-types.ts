@@ -21,6 +21,7 @@ export async function createEventType(formData: FormData) {
   await requireAdmin();
   const payload = JSON.parse(String(formData.get("payload")));
   if (typeof payload.slug === "string") payload.slug = sanitizeSlug(payload.slug);
+  if (!payload.slug && typeof payload.title === "string") payload.slug = sanitizeSlug(payload.title);
   const parsed = eventTypeFormSchema.parse(payload);
   const col = await eventTypes();
   const last = await col.find().sort({ position: -1 }).limit(1).toArray();
@@ -41,6 +42,7 @@ export async function updateEventType(id: string, formData: FormData) {
   await requireAdmin();
   const payload = JSON.parse(String(formData.get("payload")));
   if (typeof payload.slug === "string") payload.slug = sanitizeSlug(payload.slug);
+  if (!payload.slug && typeof payload.title === "string") payload.slug = sanitizeSlug(payload.title);
   const parsed = eventTypeFormSchema.parse(payload);
   const col = await eventTypes();
   await col.updateOne({ _id: new ObjectId(id) }, { $set: { ...parsed, updatedAt: new Date() } });

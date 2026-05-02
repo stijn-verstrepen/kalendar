@@ -117,7 +117,16 @@ export function EventTypeForm({
             <Input
               id="title"
               value={state.title}
-              onChange={(e) => patch("title", e.target.value)}
+              onChange={(e) => {
+                const title = e.target.value;
+                setState((s) => ({
+                  ...s,
+                  title,
+                  slug: s.slug
+                    ? s.slug
+                    : title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").replace(/-+/g, "-"),
+                }));
+              }}
               placeholder="30 min discovery"
             />
           </div>
