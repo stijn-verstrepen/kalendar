@@ -8,9 +8,20 @@ import { eventTypeFormSchema } from "@/lib/validation";
 import { requireAdmin } from "@/lib/auth-helpers";
 import type { EventTypeDoc } from "@/lib/types";
 
+function sanitizeSlug(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export async function createEventType(formData: FormData) {
   await requireAdmin();
-  const parsed = eventTypeFormSchema.parse(JSON.parse(String(formData.get("payload"))));
+  const payload = JSON.parse(String(formData.get("payload")));
+  if (typeof payload.slug === "string") payload.slug = sanitizeSlug(payload.slug);
+  const parsed = eventTypeFormSchema.parse(payload);
   const col = await eventTypes();
   const last = await col.find().sort({ position: -1 }).limit(1).toArray();
   const position = (last[0]?.position ?? 0) + 1;
@@ -28,7 +39,9 @@ export async function createEventType(formData: FormData) {
 
 export async function updateEventType(id: string, formData: FormData) {
   await requireAdmin();
-  const parsed = eventTypeFormSchema.parse(JSON.parse(String(formData.get("payload"))));
+  const payload = JSON.parse(String(formData.get("payload")));
+  if (typeof payload.slug === "string") payload.slug = sanitizeSlug(payload.slug);
+  const parsed = eventTypeFormSchema.parse(payload);
   const col = await eventTypes();
   await col.updateOne({ _id: new ObjectId(id) }, { $set: { ...parsed, updatedAt: new Date() } });
   revalidatePath("/event-types");
