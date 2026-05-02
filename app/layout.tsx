@@ -10,8 +10,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kalendly",
-  description: "Schedule a meeting.",
+  title: "LeadLift Kalender",
+  description: "Plan een meeting.",
   icons: { icon: "/icon.svg" },
   manifest: "/manifest.json",
 };

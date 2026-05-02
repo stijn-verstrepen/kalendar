@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Wordmark } from "@/components/brand/Wordmark";
+import { LeadLiftLogo } from "@/components/brand/LeadLiftLogo";
 import {
   LayoutDashboard,
   Calendar,
@@ -29,10 +29,10 @@ export function Sidebar({ name }: { name: string }) {
       <div className="border-b border-border px-5 py-6">
         <Link
           href="/dashboard"
-          aria-label="Kalendly home"
-          className="inline-flex items-center text-ink"
+          aria-label="LeadLift home"
+          className="inline-flex items-center"
         >
-          <Wordmark size={24} />
+          <LeadLiftLogo height={22} />
         </Link>
       </div>
       <nav className="flex-1 space-y-0.5 px-3 py-4">
